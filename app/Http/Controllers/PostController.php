@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use auth;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -27,11 +28,13 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file_path' => 'required'
+            'file_path' => 'required|max:4096|mimes:jpg,png,mp4'
         ]);
 
+        $filePath = $request->file('file_path')->store('public/postmedia');
+
         return Post::create([
-            'file_path' => request('file_path'),
+            'file_path' => $filePath,
             'caption' => request('caption'),
             'user_id' => auth()->id()
         ]);
@@ -46,6 +49,14 @@ class PostController extends Controller
     public function show($id)
     {
         return Post::find($id);
+    }
+
+    public function getUserPosts($id)
+    {
+        $user = User::find($id);
+        $posts = $user->posts()->get();
+
+        return json_encode($posts);
     }
 
     /**
