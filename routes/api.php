@@ -1,5 +1,8 @@
 <?php
 
+// header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: Authorization');
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -21,8 +24,10 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']); 
 Route::get('/posts/{id}', [PostController::class, 'show']);
 Route::get('/user/{id}/posts', [PostController::class, 'getUserPosts']);
+Route::get('/user/{id}', [UserController::class, 'getUserInfo']);
 
 Route::group(['middleware' => ['auth:sanctum']], function() {
+
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::post('/posts', [PostController::class, 'store']);

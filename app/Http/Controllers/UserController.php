@@ -32,6 +32,14 @@ class UserController extends Controller
         ], 200);
     }
 
+    public function getUserInfo($id) {
+        $user = User::find($id);
+
+        return response([
+            'name' => $user->name
+        ]);
+    }
+
     /**
      * Unfollow a user
      *
